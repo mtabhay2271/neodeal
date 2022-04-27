@@ -28,7 +28,7 @@ export interface IUserDetails {
     name: string;
     email: string;
     image?: string;
-    contactNumber?: number;
+    phone?: number;
     workExperience?: number;
     daysBeforeBooking?: number;
     country?: string;

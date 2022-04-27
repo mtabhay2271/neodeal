@@ -17,9 +17,11 @@ import {
 //import { ILocation } from "../interfaces/response.interfaces";
 
 export enum Role {
-  RETAILERS="retailers",
-  TRADERS_OR_SELLERS="traders_or_sellers",
-  MANUFACTURES="manufactures",
+  RETAILERS="Retailers",
+  TRADERS_OR_SELLERS="Traders_or_sellers",
+  MANUFACTURES="Manufactures",
+  ADMIN="Admin"
+
 }
 
 
@@ -152,7 +154,7 @@ export class UpdateProfileViewModel {
   @IsNotEmpty()
   @IsNumber()
   @Type(() => Number)
-  contactNumber?: number;
+  phone?: number;
 
   @Expose()
   @IsNotEmpty()

@@ -4,19 +4,20 @@ import bcrypt from "bcrypt";
 import Users from "../models/users.model";
 import dotenv from "dotenv";
 dotenv.config();
-import { SignupViewModel } from "../view-models/auth";
+import otpModel from "../models/otp"
+import { VerifyOtpViewModel } from "../view-models/auth";
 export const strategy = (passport: any) =>
   passport.use(
     new LocalStrategy(
       {
-        usernameField: "contactNumber",
-        passwordField: "password",
+        usernameField: "phone",
+        passwordField: "otp",
         session: false,
       },
-      async function (contactNumber: string, password: string, done: any) {
+      async function (phone: string, otp: string, done: any) {
         await Users.findOne(
-          { contactNumber: contactNumber },
-          async function (err: any, user: SignupViewModel) {
+          { phone: phone },
+          async function (err: any, user: VerifyOtpViewModel) {
             if (err) {
               return done(err);
             }
@@ -24,7 +25,8 @@ export const strategy = (passport: any) =>
               return done(null, false);
             }
             if (user) {
-              if (await bcrypt.compare(password, user.password)) {
+              let findUserotp= await otpModel.findOne({phone:user.phone,otp:user.otp})
+              if (findUserotp) {
                 return done(null, user);
               } else {
                 return done(null, false);
@@ -42,11 +44,12 @@ var opts: StrategyOptions = {
 export const JwtStrategy = (passport: any) =>
   passport.use(
     new Strategy(opts, function (jwt_payload, done) {
-      Users.findOne({ _id: jwt_payload._id, role: jwt_payload.role }, function (err: any, user: any) {
+      otpModel.findOne({ phone: jwt_payload.phone, otp: jwt_payload.otp }, function (err: any, user: any) {
         if (err) {
           return done(err, false);
         }
         if (user) {
+          //let finduser=await UserModel.findOne({phone:})
           return done(null, user, jwt_payload);
         } else {
           return done(null, false);
@@ -56,3 +59,8 @@ export const JwtStrategy = (passport: any) =>
       );
     })
   );
+
+
+
+
+  

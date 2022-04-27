@@ -12,56 +12,60 @@ export class GeoJson {
 }
 @Index({ location: "2dsphere" })
 export class User {
-  @prop({ required: true })
-  contactNumber!: string;
-
-  @prop({ required: true })
-  password!: string;
-
-  @prop({ required: true })
-  role!: string;
-
-  @prop({ default: " " })
-  name!: string;
   @prop({ default: " " })
   email!: string;
 
-  @prop({ default: " " })
-  business_name!: string;
-  @prop({ default: " " })
-  gstin!: string;
-
-  @prop({ default: " " })
-  lat!: string;
-
-  @prop({ default: " " })
-  longtitude!: string;
-
-  @prop({ default: " " })
-  pincode!: number;
-
-  @prop({ default: " " })
-  business_category!: string;
-
-  @prop({
-    type: GeoJson,
-    _id: false,
-  })
-  location!: GeoJson;
-
   @prop()
-  image!: any; //IImageDatabaseObj;
+  password!: string;
+
+  @prop({ default: " " })
+  name!: string;
+
+  @prop({ required: true })
+  phone!: string;
+
+  @prop({ required: true })
+  userType!: string;
+
+  @prop({ default: true })
+  isActive: boolean;
+
+  @prop({ default: false })
+  isApproved!: boolean;
+
+  @prop({ default: false })
+  isKycApproved!: boolean;
+
+  // @prop({ default: " " })
+  // business_name!: string;
+  // @prop({ default: " " })
+  // gstin!: string;
+
+  // @prop({ default: " " })
+  // lat!: string;
+
+  // @prop({ default: " " })
+  // longtitude!: string;
+
+  // @prop({ default: " " })
+  // pincode!: number;
+
+  // @prop({ default: " " })
+  // business_category!: string;
+
+  // @prop({
+  //   type: GeoJson,
+  //   _id: false,
+  // })
+  // location!: GeoJson;
 
   // @prop()
-  // state!: string;
+  // image!: any; //IImageDatabaseObj;
 
   // @prop()
-  // city!: string;
+  // otp!: number;
 
-  // @prop()
-  // country!: string;
-  // @prop()
-  // otp!: string;
+  
 }
 
 const USER_DB_MODEL = getModelForClass(User, {

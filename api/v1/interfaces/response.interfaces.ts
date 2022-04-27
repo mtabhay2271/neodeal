@@ -18,27 +18,27 @@ export interface IUser {
     city?: string;
     country?: string;
     workExperience?: number;
-    contactNumber?: number;
+    phone?: number;
     location?: object;
     image?: string;
 }
 
-export interface IResponce {
+export interface IResponse {
     message: string;
     success: Boolean;
     data?: any;
     error?: any;
 }
 
-export interface IServiceResponse extends IResponce {
+export interface IServiceResponse extends IResponse {
     statusCode: number;
 }
 
 export interface ICommonServices {
     statusCode: number;
-    data: IResponce
+    data: IResponse
 }
 
-export interface ICommonController extends IResponce {
+export interface ICommonController extends IResponse {
 
 }

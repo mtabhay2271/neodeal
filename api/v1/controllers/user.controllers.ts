@@ -12,7 +12,7 @@
 //         return res.status(400).send({
 //           success: false,
 //           message: responseMessages.VALIDATION_ERROR,
-//           data: validatedData.error,
+//           error: validatedData.error,
 //         });
 //       } else {
 //         let validated_user: SignupViewModel = validatedData.data as SignupViewModel;
@@ -35,7 +35,7 @@
 //         return res.status(400).send({
 //           success: false,
 //           message: responseMessages.VALIDATION_ERROR,
-//           data: validatedData.error,
+//           error: validatedData.error,
 //         });
 //       } else {
 //         let user = await Services.login(req);

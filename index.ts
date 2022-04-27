@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(passport.initialize());
 app.use(passport.session());
-strategy(passport);
+//strategy(passport);
 JwtStrategy(passport);
 
 app.use(express.json());
@@ -41,6 +41,6 @@ app.use("/api", (req: Request, res: Response, next: NextFunction) => {
   next();
 }, routes);
 
-const PORT = process.env.PORT || 7009;
+const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`App listening on ${PORT}`));
 

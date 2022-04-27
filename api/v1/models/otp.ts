@@ -3,7 +3,7 @@ import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 
 export class LoginOTPs implements TimeStamps {
   @prop({ type: String })
-  contactNumber: string;
+  phone: string;
 
   @prop({ type: String })
   otp: string;

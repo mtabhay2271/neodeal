@@ -2,39 +2,38 @@ import { Request, Response, NextFunction } from "express";
 import responseMessages from "../common/response.messages";
 import utility, { Validation } from "../common/utility";
 import { ICommonController } from "../interfaces/response.interfaces";
-import Services from "../services/auth.services";
+import Services from "../services/user-status.services";
 import {
-  VerifyOtpViewModel,
-  SignupViewModel,
-  ChangePasswordViewModel,
-  ForgetPasswordViewModel,
-  ResetPasswordViewModel,
-  AdminLoginViewModel
-} from "../view-models/auth";
-class AuthControllersData {
-  signup = async (
+  CheckMongoIdViewmodel,
+} from "../view-models/common";
+class userStatusControllersData {
+  accountActive = async (
     req: Request,
     res: Response<ICommonController>,
     next: NextFunction
   ) => {
     try {
       let validatedData: Validation = await utility.validateAndConvert(
-        SignupViewModel,
-        req.body
+        CheckMongoIdViewmodel,
+        JSON.parse(`{"_id":"${req.params._id}"}`)
       );
       if (validatedData.error) {
+      console.log(validatedData.error)
+
         return res.status(400).send({
           success: false,
           message: responseMessages.VALIDATION_ERROR,
           error: validatedData.error,
         });
       } else {
-        let validated_user: SignupViewModel =
-          validatedData.data as SignupViewModel;
-        let user = await Services.signup( validated_user);
+        let accountActiveViewmodel: CheckMongoIdViewmodel =
+          validatedData.data as CheckMongoIdViewmodel;
+
+        let user = await Services.accountActive(req,accountActiveViewmodel);
         return res.status(user.statusCode).send(user.data);
       }
     } catch (error) {
+      console.log(error)
       return res.status(500).send({
         success: false,
         message: responseMessages.ERROR_ISE,
@@ -42,15 +41,16 @@ class AuthControllersData {
       });
     }
   };
-  verifyOtp = async (
+
+  accountSuspend = async (
     req: Request,
     res: Response<ICommonController>,
     next: NextFunction
   ) => {
     try {
       let validatedData: Validation = await utility.validateAndConvert(
-        VerifyOtpViewModel,
-        req.body
+        CheckMongoIdViewmodel,
+        JSON.parse(`{"_id":"${req.params._id}"}`)
       );
       if (validatedData.error) {
         return res.status(400).send({
@@ -59,73 +59,10 @@ class AuthControllersData {
           error: validatedData.error,
         });
       } else {
-        let loginViewModel: VerifyOtpViewModel = validatedData.data as VerifyOtpViewModel;
-        let user = await Services.verifyOtp( loginViewModel);
-        return res.status(user.statusCode).send(user.data);
-      }
-    } catch (error) {
-      return res.status(500).send({
-        success: false,
-        message: responseMessages.ERROR_ISE,
-        error,
-      });
-    }
-  };
-  forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      let validatedData: Validation = await utility.validateAndConvert(
-        ForgetPasswordViewModel,
-        req.body
-      );
-      if (validatedData.error) {
-        console.log(validatedData.error);
+        let accountSuspendViewmodel: CheckMongoIdViewmodel =
+          validatedData.data as CheckMongoIdViewmodel;
 
-        return res.status(400).send({
-          success: false,
-          message: responseMessages.VALIDATION_ERROR,
-          error: validatedData.error,
-        });
-      } else {
-        let forgetPasswordViewModel: ForgetPasswordViewModel =
-          validatedData.data as ForgetPasswordViewModel;
-        let response = await Services.forgotPassword( forgetPasswordViewModel);
-        return res.status(response.statusCode).send(response.data);
-      }
-    } catch (error) {
-      return res.status(500).send({
-        success: false,
-        message: responseMessages.ERROR_ISE,
-        error,
-      });
-    }
-  };
-
-  changePassword = async (req: Request, res: Response) => {
-    try {
-      let validatedData: Validation = await utility.validateAndConvert(
-        ChangePasswordViewModel,
-        req.body
-
-      );
-      if (validatedData.error) {
-        return res.status(400).send({
-          success: false,
-          message: responseMessages.VALIDATION_ERROR,
-          error: validatedData.error,
-        });
-      } else if (
-        validatedData.data.oldPassword === validatedData.data.newPassword
-      ) {
-        return res
-          .status(400)
-          .send({
-            success: false,
-            message: responseMessages.USER_OLD_NEW_PASSWORD_SAME,
-          });
-      } else {
-        let model: ChangePasswordViewModel =
-          validatedData.data as ChangePasswordViewModel;
-        let user = await Services.changePassword(req, model);
+        let user = await Services.accountSuspend(req,accountSuspendViewmodel);
         return res.status(user.statusCode).send(user.data);
       }
     } catch (error) {
@@ -137,11 +74,15 @@ class AuthControllersData {
     }
   };
 
-  resetPassword = async (req: Request, res: Response) => {
+  accountApproved = async (
+    req: Request,
+    res: Response<ICommonController>,
+    next: NextFunction
+  ) => {
     try {
       let validatedData: Validation = await utility.validateAndConvert(
-        ResetPasswordViewModel,
-        req.body
+        CheckMongoIdViewmodel,
+        JSON.parse(`{"_id":"${req.params._id}"}`)
       );
       if (validatedData.error) {
         return res.status(400).send({
@@ -150,10 +91,11 @@ class AuthControllersData {
           error: validatedData.error,
         });
       } else {
-        let resetPasswordViewModel: ResetPasswordViewModel =
-          validatedData.data as ResetPasswordViewModel;
-        let response = await Services.resetPassword(resetPasswordViewModel);
-        return res.status(response.statusCode).send(response.data);
+        let accountRejectViewmodel: CheckMongoIdViewmodel =
+          validatedData.data as CheckMongoIdViewmodel;
+
+        let user = await Services.accountApproved(req,accountRejectViewmodel);
+        return res.status(user.statusCode).send(user.data);
       }
     } catch (error) {
       return res.status(500).send({
@@ -164,15 +106,15 @@ class AuthControllersData {
     }
   };
 
-  login = async (
+  accountRejected = async (
     req: Request,
     res: Response<ICommonController>,
     next: NextFunction
   ) => {
     try {
       let validatedData: Validation = await utility.validateAndConvert(
-        AdminLoginViewModel,
-        req.body
+        CheckMongoIdViewmodel,
+        JSON.parse(`{"_id":"${req.params._id}"}`)
       );
       if (validatedData.error) {
         return res.status(400).send({
@@ -181,8 +123,74 @@ class AuthControllersData {
           error: validatedData.error,
         });
       } else {
-        let loginViewModel: AdminLoginViewModel = validatedData.data as AdminLoginViewModel;
-        let user = await Services.login( loginViewModel);
+        let accountApprovedViewmodel: CheckMongoIdViewmodel =
+          validatedData.data as CheckMongoIdViewmodel;
+
+        let user = await Services.accountRejected(req,accountApprovedViewmodel);
+        return res.status(user.statusCode).send(user.data);
+      }
+    } catch (error) {
+      return res.status(500).send({
+        success: false,
+        message: responseMessages.ERROR_ISE,
+        error,
+      });
+    }
+  };
+  
+  kycApproved = async (
+    req: Request,
+    res: Response<ICommonController>,
+    next: NextFunction
+  ) => {
+    try {
+      let validatedData: Validation = await utility.validateAndConvert(
+        CheckMongoIdViewmodel,
+        JSON.parse(`{"_id":"${req.params._id}"}`)
+      );
+      if (validatedData.error) {
+        return res.status(400).send({
+          success: false,
+          message: responseMessages.VALIDATION_ERROR,
+          error: validatedData.error,
+        });
+      } else {
+        let kycApprovedViewmodel: CheckMongoIdViewmodel =
+          validatedData.data as CheckMongoIdViewmodel;
+
+        let user = await Services.kycApproved(req,kycApprovedViewmodel);
+        return res.status(user.statusCode).send(user.data);
+      }
+    } catch (error) {
+      return res.status(500).send({
+        success: false,
+        message: responseMessages.ERROR_ISE,
+        error,
+      });
+    }
+  };
+
+  kycReject = async (
+    req: Request,
+    res: Response<ICommonController>,
+    next: NextFunction
+  ) => {
+    try {
+      let validatedData: Validation = await utility.validateAndConvert(
+        CheckMongoIdViewmodel,
+        JSON.parse(`{"_id":"${req.params._id}"}`)
+      );
+      if (validatedData.error) {
+        return res.status(400).send({
+          success: false,
+          message: responseMessages.VALIDATION_ERROR,
+          error: validatedData.error,
+        });
+      } else {
+        let kycRejectViewmodel: CheckMongoIdViewmodel =
+          validatedData.data as CheckMongoIdViewmodel;
+
+        let user = await Services.kycReject(req,kycRejectViewmodel);
         return res.status(user.statusCode).send(user.data);
       }
     } catch (error) {
@@ -194,4 +202,4 @@ class AuthControllersData {
     }
   };
 }
-export default new AuthControllersData();
+export default new userStatusControllersData();

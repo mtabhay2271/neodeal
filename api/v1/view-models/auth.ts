@@ -1,21 +1,13 @@
-import { mongoose } from "@typegoose/typegoose";
 import { Expose, Type } from "class-transformer";
 import {
-  isDefined,
   IsDefined,
   IsEmail,
   IsEnum,
-  IsMongoId,
-  isNotEmpty,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
-  Max,
-  Min,
 } from "class-validator";
 import { Role } from "./users";
-//import { ILocation } from "../interfaces/response.interfaces";
 
 export class SignupViewModel {
   @Expose()
@@ -23,14 +15,11 @@ export class SignupViewModel {
   @IsNotEmpty()
   @IsString()
   @Type(() => String)
-  contactNumber!: string;
+  phone!: string;
 
   @Expose()
-  @IsDefined()
-  @IsString()
-  @IsNotEmpty()
-  @Type(() => String)
-  password!: string;
+  
+  otp!: number;
 
   @Expose()
   @IsDefined()
@@ -38,9 +27,9 @@ export class SignupViewModel {
   @IsEnum(Role, {
     each: true,
     message:
-      "user role must be from one of them i.e. retailers,traders_or_sellers,manufactures,",
+      "user type must be from one of them i.e. Retailers,Traders_or_sellers,Manufactures,",
   })
-  role!: string;
+  userType!: string;
 
   @Expose()
   flag!: string;
@@ -63,12 +52,26 @@ export class SignupViewModel {
   location?: any; //ILocation;
 }
 
-export class LoginViewModel {
+export class VerifyOtpViewModel {
   @Expose()
   @IsDefined()
   @IsNotEmpty()
   @IsString()
-  contactNumber!: string;
+  phone!: string;
+  
+  @Expose()
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  @Type(() => String)
+  otp!: string;
+}
+export class AdminLoginViewModel {
+  @Expose()
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  phone!: string;
   
   @Expose()
   @IsDefined()
@@ -96,7 +99,7 @@ export class ForgetPasswordViewModel {
   @IsString()
   @IsNotEmpty()
   @Type(() => String)
-  contactNumber: string;
+  phone: string;
 }
 
 export class ResetPasswordViewModel {
@@ -104,7 +107,7 @@ export class ResetPasswordViewModel {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
-  contactNumber: string;
+  phone: string;
 
   @Expose()
   @IsDefined()

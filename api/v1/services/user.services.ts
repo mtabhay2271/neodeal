@@ -57,7 +57,7 @@
 //             data: {
 //               email: foundUser.email,
 //               name: foundUser.name,
-//               role: foundUser.role,
+//               userType: foundUser.userType,
 //               daysBeforeBooking: foundUser.daysBeforeBooking,
 //               workExperience: foundUser.workExperience,
 //               _id: foundUser._id,
@@ -66,7 +66,7 @@
 //                 {
 //                   email: foundUser.email,
 //                   _id: foundUser._id,
-//                   role: foundUser.role,
+//                   userType: foundUser.userType,
 //                 },
 //                 "1d"
 //               ),
@@ -95,12 +95,12 @@
 //           name: userDetail.name,
 //           email: userDetail.email,
 //           image: userDetail.image ? userDetail.image.url : '',
-//           contactNumber: userDetail.contactNumber,
+//           phone: userDetail.phone,
 //           location: userDetail.location,
 //           country: userDetail.country,
 //           city: userDetail.city,
 //         }
-//         if (userDetail.role === roleConstants.planner) {
+//         if (userDetail.userType === roleConstants.planner) {
 //           data.workExperience = userDetail.workExperience;
 //           data.daysBeforeBooking = userDetail.daysBeforeBooking;
 //         }
